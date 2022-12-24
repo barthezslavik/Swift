@@ -36,11 +36,13 @@ struct ContentView: View {
                         Spacer()
                         Toggle(isOn: Binding(
                             get: { item.isCompleted },
-                            set: {
-                                var mutableItem = item
-                                mutableItem.isCompleted = $0
-                                if let index = self.todoList.items.firstIndex(where: { $0.id == item.id }) {
-                                    self.todoList.items[index] = mutableItem
+                            set: {_ in 
+                                withAnimation {  // specify the animation to use
+                                    var mutableItem = item
+                                    mutableItem.isCompleted = !mutableItem.isCompleted
+                                    if let index = self.todoList.items.firstIndex(where: { $0.id == item.id }) {
+                                        self.todoList.items[index] = mutableItem
+                                    }
                                 }
                             }
                         )) {
