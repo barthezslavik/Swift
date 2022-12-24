@@ -55,7 +55,27 @@ struct WeatherData: Codable {
     let forecast: [ForecastData]
 }
 
-struct ForecastData: Codable {
+struct WeatherAPI {
+    static let shared = WeatherAPI()
+
+    func weather(for city: String) -> AnyPublisher<WeatherData, Error> {
+        // TODO: Implement the API call to fetch weather data for the given city
+        return Future { promise in
+            // simulate a long-running API call
+            DispatchQueue.global().asyncAfter(deadline: .now() + 2) {
+                let weather = WeatherData(temperature: 73, forecast: [
+                    ForecastData(day: "Monday", high: 80, low: 70),
+                    ForecastData(day: "Tuesday", high: 82, low: 68)
+                ])
+                promise(.success(weather))
+            }
+        }
+        .eraseToAnyPublisher()
+    }
+}
+
+struct ForecastData: Codable, Identifiable {
+    var id = UUID()  // add an 'id' property
     let day: String
     let high: Int
     let low: Int
